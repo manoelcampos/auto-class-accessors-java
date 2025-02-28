@@ -2,7 +2,8 @@ package io.github.manoelcampos.accessors;
 
 import net.bytebuddy.agent.builder.AgentBuilder;
 import net.bytebuddy.asm.Advice;
-import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.matcher.ElementMatcher;
 
 import java.lang.instrument.Instrumentation;
 
@@ -13,13 +14,20 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  */
 public class EntityAccessorAgent {
     public static void premain(String agentArgs, Instrumentation inst) {
-        final var isClassMatcher = not(isRecord().or(isInterface()).or(isAnnotation()));
         final var entityMatcher = named("jakarta.persistence.Entity");
 
         new AgentBuilder.Default()
-                .type(isClassMatcher.and(ElementMatchers.isAnnotatedWith(entityMatcher)))
-                .transform((builder, typeDescription, classLoader, module, domain) ->
-                       builder.method(ElementMatchers.isPublic()).intercept(Advice.to(FieldAccessInterceptor.class))
+                .type(isClassMatcher().and(isAnnotatedWith(entityMatcher)))
+                .transform((builder, typeDesc, cl, m, d) ->
+                       builder.method(isPublic()).intercept(Advice.to(FieldAccessInterceptor.class))
                 ).installOn(inst);
+    }
+
+    /**
+     * Checks if an element is not a record, interface or annotation, but a class.
+     * @return
+     */
+    private static ElementMatcher.Junction<TypeDescription> isClassMatcher() {
+        return not(isRecord().or(isInterface()).or(isAnnotation()));
     }
 }
