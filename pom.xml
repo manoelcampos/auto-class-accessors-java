@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.manoelcampos</groupId>
-    <artifactId>active-record</artifactId>
+    <artifactId>auto-class-accessors</artifactId>
     <version>1.0.0</version>
 
     <properties>

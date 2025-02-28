@@ -1,4 +1,4 @@
-package io.github.manoelcampos.activerecord;
+package io.github.manoelcampos.accessors;
 
 import net.bytebuddy.asm.Advice;
 
