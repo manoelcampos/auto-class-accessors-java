@@ -10,6 +10,9 @@ import java.lang.instrument.Instrumentation;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
+ * Manipulates bytecode of classes that directly access public fields in JPA Entities,
+ * replacing such access by the respective getter and setter method calls (if existent).
+ * The interception of field access is done by the {@link FieldAccessInterceptor} class.
  * @author Manoel Campos
  */
 public class EntityAccessorAgent {

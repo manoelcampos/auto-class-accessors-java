@@ -5,9 +5,18 @@ import net.bytebuddy.asm.Advice;
 import java.lang.reflect.Method;
 
 /**
+ * Intercepts access (reads and writes) to public fields in classes
+ * defined by {@link EntityAccessorAgent}, replacing such access
+ * by the respective getter and setter methods (if existent).
  * @author Manoel Campos
  */
 public class FieldAccessInterceptor {
+    /**
+     * Intercepts field read access, replacing it by the respective getter method call (if existing).
+     * @param fieldValue
+     * @param instance
+     * @param methodName
+     */
     @Advice.OnMethodEnter
     public static void interceptRead(
          @Advice.FieldValue(value = "name", readOnly = false) Object fieldValue,
@@ -21,6 +30,12 @@ public class FieldAccessInterceptor {
         } catch (Exception ignored) {/**/}
     }
 
+    /**
+     * Intercepts field write access, replacing it by the respective setter method call (if existing).
+     * @param newValue
+     * @param instance
+     * @param methodName
+     */
     @Advice.OnMethodExit
     public static void interceptWrite(
           final @Advice.Argument(value = 0) Object newValue,
