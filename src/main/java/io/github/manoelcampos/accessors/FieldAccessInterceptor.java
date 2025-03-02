@@ -27,7 +27,9 @@ public class FieldAccessInterceptor {
             final String fieldName = extractFieldName(methodName);
             final Method getter = instance.getClass().getMethod("get" + capitalize(fieldName));
             fieldValue = getter.invoke(instance);
-        } catch (Exception ignored) {/**/}
+        } catch (Exception ignored) {
+            // If the getter method doesn't exist or doesn't have proper visibility, fieldValue will keep the original value
+        }
     }
 
     /**
@@ -46,7 +48,9 @@ public class FieldAccessInterceptor {
             final String fieldName = extractFieldName(methodName);
             final Method setter = instance.getClass().getMethod("set" + capitalize(fieldName), newValue.getClass());
             setter.invoke(instance, newValue);
-        } catch (Exception ignored) {/**/}
+        } catch (Exception ignored) {
+            // If the setter method doesn't exist or doesn't have proper visibility, the field value will keep the original value
+        }
     }
 
     private static String extractFieldName(final String methodName) {
