@@ -1,0 +1,71 @@
+:sectnums:
+
+= Getting Started
+
+== Reference Documentation
+
+For further reference, please consider the following sections:
+
+* https://maven.apache.org/guides/index.html[Official Apache Maven documentation]
+* https://docs.spring.io/spring-boot/docs/3.0.6/maven-plugin/reference/html/[Spring Boot Maven Plugin Reference Guide]
+* https://docs.spring.io/spring-boot/docs/3.0.6/maven-plugin/reference/html/#build-image[Create an OCI image]
+* https://docs.spring.io/spring-boot/docs/3.0.6/reference/html/native-image.html#native-image[GraalVM Native Image Support]
+
+== Additional Links
+
+These additional references should also help you:
+
+* https://docs.spring.io/spring-boot/docs/3.0.6/maven-plugin/reference/htmlsingle/#aot[Configure AOT settings in Build Plugin]
+
+== GraalVM Native Support
+
+This project has been configured to let you generate either a lightweight container or a native executable.
+It is also possible to run your tests in a native image.
+
+=== Lightweight Container with Cloud Native Buildpacks
+
+If you're already familiar with Spring Boot container images support, this is the easiest way to get started.
+Docker should be installed and configured on your machine prior to creating the image.
+
+To create the image, run the following goal:
+
+[source, bash]
+----
+./mvnw spring-boot:build-image -Pnative
+----
+
+Then, you can run the app like any other container:
+
+[source, bash]
+----
+docker run --rm adaa:0.0.1
+----
+
+=== Executable with Native Build Tools
+
+Use this option if you want to explore more options such as running your tests in a native image.
+The GraalVM `native-image` compiler should be installed and configured on your machine.
+
+NOTE: GraalVM 22.3+ is required. If you have http://sdkman.io[sdkman] installed, you can execute `sdk install java 22.3.r19-grl`, for instance, then set the GraalVM as the current JDK using `sdk use java 22.3.r19-grl`.
+
+To create the executable, run the following goal:
+
+[source, bash]
+----
+./mvnw native:compile -Pnative
+----
+
+Then, you can run the app as follows:
+
+----
+$ target/adaa
+----
+
+You can also run your existing tests suite in a native image.
+This is an efficient way to validate the compatibility of your application.
+
+To run your existing tests in a native image, run the following goal:
+
+----
+$ ./mvnw test -PnativeTest
+----
