@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 
 /**
  * Intercepts access (reads and writes) to public fields in classes
- * defined by {@link EntityAccessorAgent}, replacing such access
+ * defined by {@link EntityAccessorInstrumentationPlugin}, replacing such access
  * by the respective getter and setter methods (if existent).
  * @author Manoel Campos
  */

@@ -1,3 +1,0 @@
-Premain-Class: io.github.manoelcampos.accessors.EntityAccessorAgent
-Can-Redefine-Classes: true
-Can-Retransform-Classes: true
