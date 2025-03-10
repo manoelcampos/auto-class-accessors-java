@@ -1,8 +1,9 @@
 package io.github.manoelcampos.accessors.sample;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.util.Objects;
 
@@ -14,14 +15,13 @@ import java.util.Objects;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     public Long id;
 
-    @NotNull @NotBlank
     public String name;
 
-    @NotNull @NotBlank
     public String model;
+
+    public Boolean available;
 
     public Product() {
     }
@@ -30,8 +30,17 @@ public class Product {
         this.id = id;
     }
 
-    public Product(final String name) {
+    public Product(final String name, final String model) {
         this.name = name;
+        this.model = model;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return Objects.requireNonNullElse(id, 0L);
     }
 
     public String getModel() {
@@ -48,9 +57,4 @@ public class Product {
         this.name = Objects.requireNonNullElse(name, "");
         System.out.println("Setting product.name: " + this.name);
     }
-
-    public Long getId() {
-        return Objects.requireNonNullElse(id, 0L);
-    }
-
 }

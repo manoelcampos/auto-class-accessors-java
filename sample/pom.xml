@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.github.manoelcampos</groupId>
+    <artifactId>automatic-class-accessors-sample</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>7.0.0.Alpha2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy-maven-plugin</artifactId>
+                <version>1.17.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>transform</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <transformations>
+                        <transformation>
+                            <!--
+                            A tiny lib that uses bytecode manipulation to provide automatic implementation of accessors in Java classes.
+                            It changes classes annotated with @Entity, replacing reads/writes to fields
+                            with calls to getter/setter methods (if existing).
+
+                            https://github.com/manoelcampos/auto-class-accessors-java
+                            -->
+                            <groupId>io.github.manoelcampos</groupId>
+                            <artifactId>auto-class-accessors</artifactId>
+                            <version>1.0.0</version>
+                            <plugin>io.github.manoelcampos.accessors.EntityAccessorInstrumentationPlugin</plugin>
+                        </transformation>
+                    </transformations>
+                    <source>${maven.compiler.release}</source>
+                    <target>${maven.compiler.release}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
