@@ -9,8 +9,15 @@ import net.bytebuddy.matcher.ElementMatcher;
  * @author Manoel Campos
  */
 abstract class AbstractAccessorMatcher extends ElementMatcher.Junction.AbstractBase<MethodDescription> {
+    /**
+     * The field to find the accessor for
+     */
     protected final FieldDescription fieldDescription;
 
+    /**
+     * Creates an Accessor Matcher for a given field.
+     * @param fieldDescription see {@link #fieldDescription}
+     */
     AbstractAccessorMatcher(final FieldDescription fieldDescription) {
         this.fieldDescription = fieldDescription;
     }

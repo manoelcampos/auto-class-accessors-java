@@ -6,7 +6,11 @@ import net.bytebuddy.matcher.ElementMatcher;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
+ * An {@link ElementMatcher} that matches instance fields that are public and non-static.
+ * It's used to intercept reads and writes to such fields in order to replace them by the respective accessor method calls.
+ *
  * @author Manoel Campos
+ * @see EntityAccessorInstrumentationPlugin
  */
 class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDescription> {
     private FieldDescription fieldDescription;

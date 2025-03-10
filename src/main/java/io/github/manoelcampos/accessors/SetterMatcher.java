@@ -2,11 +2,14 @@ package io.github.manoelcampos.accessors;
 
 import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.matcher.ElementMatcher;
 
 import static net.bytebuddy.matcher.ElementMatchers.isSetter;
 
 /**
+ * Aa {@link ElementMatcher} to check if a method is the setter for a given field.
  * @author Manoel Campos
+ * @see EntityAccessorInstrumentationPlugin
  */
 class SetterMatcher extends AbstractAccessorMatcher {
     public SetterMatcher(final FieldDescription fieldDescription) {
