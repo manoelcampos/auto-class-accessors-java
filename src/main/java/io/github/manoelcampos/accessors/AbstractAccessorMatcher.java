@@ -1,6 +1,5 @@
 package io.github.manoelcampos.accessors;
 
-import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
@@ -10,16 +9,22 @@ import net.bytebuddy.matcher.ElementMatcher;
  */
 abstract class AbstractAccessorMatcher extends ElementMatcher.Junction.AbstractBase<MethodDescription> {
     /**
-     * The field to find the accessor for
+     * A matcher that contains the last instance field matched,
+     * which its accessor method will be lookup up by subclasses of this class.
      */
-    protected final FieldDescription fieldDescription;
+    private final InstanceFieldMatcher fieldMatcher;
 
     /**
      * Creates an Accessor Matcher for a given field.
-     * @param fieldDescription see {@link #fieldDescription}
+     * @param fieldMatcher see {@link #fieldMatcher}
      */
-    AbstractAccessorMatcher(final FieldDescription fieldDescription) {
-        this.fieldDescription = fieldDescription;
+    AbstractAccessorMatcher(final InstanceFieldMatcher fieldMatcher) {
+        this.fieldMatcher = fieldMatcher;
+    }
+
+    protected boolean isMatchedFieldBoolean() {
+        final var fieldTypeName = fieldMatcher.getFieldDescription().getType().getTypeName();
+        return fieldTypeName.equals("boolean") || fieldTypeName.equals("java.lang.Boolean");
     }
 
     protected String capitalize(final String name) {
@@ -37,6 +42,14 @@ abstract class AbstractAccessorMatcher extends ElementMatcher.Junction.AbstractB
 
     @Override
     public String toString() {
-        return "%s{field=%s}".formatted(getClass().getSimpleName(), fieldDescription.getName());
+        return "%s{field=%s}".formatted(getClass().getSimpleName(), getFieldName());
+    }
+
+    /**
+     * {@return the name of the matched instance field}
+     * @see #fieldMatcher
+     */
+    public String getFieldName(){
+        return fieldMatcher.getFieldDescription().getName();
     }
 }

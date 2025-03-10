@@ -1,6 +1,5 @@
 package io.github.manoelcampos.accessors;
 
-import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -21,10 +20,10 @@ class GetterMatcher extends AbstractAccessorMatcher {
     /**
      * Creates a GetterMatcher.
      * @param typeDescription see {@link #typeDescription}
-     * @param fieldDescription see {@link #fieldDescription}
+     * @param fieldMatcher see {@link #fieldMatcher}
      */
-    public GetterMatcher(final TypeDescription typeDescription, final FieldDescription fieldDescription) {
-        super(fieldDescription);
+    public GetterMatcher(final TypeDescription typeDescription, final InstanceFieldMatcher fieldMatcher) {
+        super(fieldMatcher);
         this.typeDescription = typeDescription;
     }
 
@@ -35,7 +34,7 @@ class GetterMatcher extends AbstractAccessorMatcher {
             System.out.println("Type being transformed: " + typeDescription.getName());
             System.out.printf(
                     "        Field: %-10s Getter: %s%n",
-                    fieldDescription.getName(), methodDescription.getName());
+                    getFieldName(), methodDescription.getName());
         }
 
         return matches;
@@ -44,13 +43,9 @@ class GetterMatcher extends AbstractAccessorMatcher {
     @Override
     protected boolean isAccessorForField(final MethodDescription methodDescription) {
         final var methodName = methodDescription.getName();
-        final var isBoolean = isBooleanField(fieldDescription);
-        final var fieldName = capitalize(fieldDescription.getName());
+        final var isBoolean = isMatchedFieldBoolean();
+        final var fieldName = capitalize(getFieldName());
         return (isBoolean && methodName.equals("is"+fieldName)) || (!isBoolean && methodName.equals("get"+fieldName));
     }
 
-    private static boolean isBooleanField(final FieldDescription fieldDescription) {
-        final var fieldTypeName = fieldDescription.getType().getTypeName();
-        return fieldTypeName.equals("boolean") || fieldTypeName.equals("java.lang.Boolean");
-    }
 }

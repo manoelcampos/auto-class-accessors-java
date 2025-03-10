@@ -1,6 +1,5 @@
 package io.github.manoelcampos.accessors;
 
-import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
@@ -12,8 +11,8 @@ import static net.bytebuddy.matcher.ElementMatchers.isSetter;
  * @see EntityAccessorInstrumentationPlugin
  */
 class SetterMatcher extends AbstractAccessorMatcher {
-    public SetterMatcher(final FieldDescription fieldDescription) {
-        super(fieldDescription);
+    public SetterMatcher(final InstanceFieldMatcher fieldMatcher) {
+        super(fieldMatcher);
     }
 
     @Override
@@ -22,7 +21,7 @@ class SetterMatcher extends AbstractAccessorMatcher {
         if(matches) {
             System.out.printf(
                     "       Field: %-10s Setter: %s%n",
-                    fieldDescription.getName(), methodDescription.getName());
+                    getFieldName(), methodDescription.getName());
         }
 
         return matches;
@@ -30,7 +29,7 @@ class SetterMatcher extends AbstractAccessorMatcher {
 
     @Override
     protected boolean isAccessorForField(final MethodDescription methodDescription) {
-        return methodDescription.getName().equals("set" + capitalize(fieldDescription.getName()));
+        return methodDescription.getName().equals("set" + capitalize(getFieldName()));
     }
 
 }

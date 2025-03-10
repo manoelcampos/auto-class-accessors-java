@@ -13,6 +13,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @see EntityAccessorInstrumentationPlugin
  */
 class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDescription> {
+    /** @see #getFieldDescription() */
     private FieldDescription fieldDescription;
 
     @Override
@@ -25,6 +26,11 @@ class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDes
         return matches;
     }
 
+    /**
+     * {@return the last instance field matched by this matcher}
+     * Based on this field, an accessor method will be searched to replace the field access.
+     * @see AbstractAccessorMatcher
+     */
     public FieldDescription getFieldDescription() {
         return fieldDescription;
     }
