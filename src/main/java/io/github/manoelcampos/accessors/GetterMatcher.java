@@ -33,7 +33,7 @@ class GetterMatcher extends AbstractAccessorMatcher {
         if(matches) {
             System.out.println("Type being transformed: " + typeDescription.getName());
             System.out.printf(
-                    "        Field: %-10s Getter: %s%n",
+                    "         Field: %-10s Getter: %s%n",
                     getFieldName(), methodDescription.getName());
         }
 

@@ -20,7 +20,7 @@ class SetterMatcher extends AbstractAccessorMatcher {
         final boolean matches = isSetter().matches(methodDescription) && isAccessorForField(methodDescription);
         if(matches) {
             System.out.printf(
-                    "       Field: %-10s Setter: %s%n",
+                    "        Field: %-10s Setter: %s%n",
                     getFieldName(), methodDescription.getName());
         }
 
