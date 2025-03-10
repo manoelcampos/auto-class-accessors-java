@@ -20,33 +20,4 @@
             <version>1.17.1</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy-maven-plugin</artifactId>
-                <version>1.17.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>transform</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <transformations>
-                        <transformation>
-                            <groupId>io.github.manoelcampos</groupId>
-                            <artifactId>auto-class-accessors</artifactId>
-                            <version>1.0.0</version>
-                            <plugin>io.github.manoelcampos.accessors.EntityAccessorInstrumentationPlugin</plugin>
-                        </transformation>
-                    </transformations>
-                    <source>${maven.compiler.release}</source>
-                    <target>${maven.compiler.release}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
