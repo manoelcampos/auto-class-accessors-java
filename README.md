@@ -56,7 +56,7 @@ System.out.printf("City: %s-%s\n", city.name, city.state);
 
 ## Motivation
 
-JDK 16 introduced the [record type](https://openjdk.org/jeps/395), which are shallowly classes providing automatic getters and other utilities. However, [records cannot be fully used as JPA entities](https://thorben-janssen.com/java-records-hibernate-jpa/#records-cant-be-entities).
+JDK 16 introduced the [record type](https://openjdk.org/jeps/395), which are shallowly-immutable classes providing automatic getters and other utilities. However, [records cannot be fully used as JPA entities](https://thorben-janssen.com/java-records-hibernate-jpa/#records-cant-be-entities).
 
 This way, lots of people rely on [Lombok](https://projectlombok.org) to generate getters and setters for their entities. However, Lombok is an annotation processor that poses some challenges for projects with a more complex setup. For instance:
 
