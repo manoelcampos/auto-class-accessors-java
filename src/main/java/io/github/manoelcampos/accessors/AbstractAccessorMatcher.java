@@ -1,5 +1,6 @@
 package io.github.manoelcampos.accessors;
 
+import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
@@ -23,11 +24,15 @@ abstract class AbstractAccessorMatcher extends ElementMatcher.Junction.AbstractB
     }
 
     protected boolean isMatchedFieldBoolean() {
-        final var fieldTypeName = fieldMatcher.getFieldDescription().getType().getTypeName();
+        return isFieldBoolean(fieldMatcher.getFieldDescription());
+    }
+
+    public static boolean isFieldBoolean(final FieldDescription field) {
+        final var fieldTypeName = field.getType().getTypeName();
         return fieldTypeName.equals("boolean") || fieldTypeName.equals("java.lang.Boolean");
     }
 
-    protected String capitalize(final String name) {
+    public static String capitalize(final String name) {
         final String end = name.length() > 1 ? name.substring(1) : "";
         return name.substring(0, 1).toUpperCase() + end;
     }

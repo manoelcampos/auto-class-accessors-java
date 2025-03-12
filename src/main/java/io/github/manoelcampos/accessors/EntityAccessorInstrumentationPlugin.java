@@ -1,5 +1,6 @@
 package io.github.manoelcampos.accessors;
 
+import io.github.manoelcampos.accessors.InstanceFieldMatcher.AccessorLookup;
 import net.bytebuddy.asm.MemberSubstitution;
 import net.bytebuddy.build.Plugin;
 import net.bytebuddy.description.type.TypeDescription;
@@ -16,8 +17,8 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @author Manoel Campos
  */
 public class EntityAccessorInstrumentationPlugin implements Plugin {
-    private final InstanceFieldMatcher fieldMatcherForFieldRead = new InstanceFieldMatcher();
-    private final InstanceFieldMatcher fieldMatcherForFieldWrite = new InstanceFieldMatcher();
+    private final InstanceFieldMatcher fieldMatcherForFieldRead = new InstanceFieldMatcher(AccessorLookup.GETTER);
+    private final InstanceFieldMatcher fieldMatcherForFieldWrite = new InstanceFieldMatcher(AccessorLookup.SETTER);
 
     @Override
     public DynamicType.Builder<?> apply(
