@@ -25,7 +25,7 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
         final TypeDescription typeDescription,
         final ClassFileLocator classFileLocator)
     {
-        // TODO: See MemberSubstitution docs
+        // TODO: See MemberSubstitution docs for Notes
         // Replaces public instance fields reads by the respective getter call
         final var getterMatcher = new GetterMatcher(typeDescription, fieldMatcherForFieldRead);
         final var methodWithFieldReadVisitor = MemberSubstitution.relaxed()
