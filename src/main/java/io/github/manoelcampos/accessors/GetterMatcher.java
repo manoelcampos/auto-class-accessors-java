@@ -2,7 +2,6 @@ package io.github.manoelcampos.accessors;
 
 import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
-import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
 import static net.bytebuddy.matcher.ElementMatchers.isGetter;
@@ -14,18 +13,11 @@ import static net.bytebuddy.matcher.ElementMatchers.isGetter;
  */
 class GetterMatcher extends AbstractAccessorMatcher {
     /**
-     * The type being transformed
-     */
-    private final TypeDescription typeDescription;
-
-    /**
      * Creates a GetterMatcher.
-     * @param typeDescription see {@link #typeDescription}
      * @param fieldMatcher see {@link #fieldMatcher}
      */
-    public GetterMatcher(final TypeDescription typeDescription, final InstanceFieldMatcher fieldMatcher) {
+    public GetterMatcher(final InstanceFieldMatcher fieldMatcher) {
         super(fieldMatcher);
-        this.typeDescription = typeDescription;
     }
 
     /**

@@ -29,7 +29,7 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
     {
         // TODO: See MemberSubstitution docs for Notes
         // Replaces public instance fields reads by the respective getter call
-        final var getterMatcher = new GetterMatcher(typeDescription, fieldMatcherForFieldRead);
+        final var getterMatcher = new GetterMatcher(fieldMatcherForFieldRead);
         final var visitorForMethodWithFieldRead = MemberSubstitution.relaxed()
                                                                  .field(fieldMatcherForFieldRead)
                                                                  .onRead()
