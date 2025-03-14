@@ -12,6 +12,10 @@ import static net.bytebuddy.matcher.ElementMatchers.isSetter;
  * @see EntityAccessorInstrumentationPlugin
  */
 class SetterMatcher extends AbstractAccessorMatcher {
+    /**
+     * Creates a SetterMatcher.
+     * @param fieldMatcher see {@link #fieldMatcher}
+     */
     public SetterMatcher(final InstanceFieldMatcher fieldMatcher) {
         super(fieldMatcher);
     }

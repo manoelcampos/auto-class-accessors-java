@@ -11,7 +11,7 @@ import net.bytebuddy.matcher.ElementMatcher;
 abstract class AbstractAccessorMatcher extends ElementMatcher.Junction.AbstractBase<MethodDescription> {
     /**
      * A matcher that contains the last instance field matched,
-     * which its accessor method will be lookup up by subclasses of this class.
+     * which its accessor method will be lookup up.
      */
     private final InstanceFieldMatcher fieldMatcher;
 
