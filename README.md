@@ -1,5 +1,4 @@
-# Java Auto Class Accessors Maven Plugin ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/manoelcampos/auto-class-accessors-maven-plugin/build.yml)
-
+# Java Auto Class Accessors Maven Plugin ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/manoelcampos/auto-class-accessors-maven-plugin/build.yml) [![Maven Central](https://img.shields.io/maven-central/v/io.github.manoelcampos/auto-class-accessors-maven-plugin.svg?label=Maven%20Central)](https://central.sonatype.com/search?q=auto-class-accessors-maven-plugin&namespace=io.github.manoelcampos)
 
 A tiny Maven Plugin that uses [bytecode manipulation](https://github.com/raphw/byte-buddy) to provide automatic implementation of accessors in classes. You can make your class attributes public and the plugin will replace read and write access to them with calls to the corresponding getter and setter method (if existing).
 
