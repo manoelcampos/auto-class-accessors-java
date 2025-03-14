@@ -1,5 +1,6 @@
 package io.github.manoelcampos.accessors;
 
+import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -27,17 +28,17 @@ class GetterMatcher extends AbstractAccessorMatcher {
         this.typeDescription = typeDescription;
     }
 
+    /**
+     * {@return the name of the getter for a given field}
+     * @param field the field to retrieve its getter name
+     */
+    public static String getterName(final FieldDescription field) {
+        return "get" + capitalize(field.getName());
+    }
+
     @Override
     public boolean matches(final MethodDescription methodDescription) {
-        final boolean matches = isGetter().matches(methodDescription) && isAccessorForField(methodDescription);
-        if(matches) {
-            System.out.println("Type being transformed: " + typeDescription.getName());
-            System.out.printf(
-                    "         Field: %-10s Getter: %s%n",
-                    getFieldName(), methodDescription.getName());
-        }
-
-        return matches;
+        return isGetter().matches(methodDescription) && isAccessorForField(methodDescription);
     }
 
     @Override
@@ -47,5 +48,4 @@ class GetterMatcher extends AbstractAccessorMatcher {
         final var fieldName = capitalize(getFieldName());
         return (isBoolean && methodName.equals("is"+fieldName)) || (!isBoolean && methodName.equals("get"+fieldName));
     }
-
 }

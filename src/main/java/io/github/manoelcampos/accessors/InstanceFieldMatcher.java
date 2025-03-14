@@ -4,8 +4,8 @@ import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
-import static io.github.manoelcampos.accessors.AbstractAccessorMatcher.capitalize;
-import static io.github.manoelcampos.accessors.AbstractAccessorMatcher.isFieldBoolean;
+import static io.github.manoelcampos.accessors.GetterMatcher.getterName;
+import static io.github.manoelcampos.accessors.SetterMatcher.setterName;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
@@ -38,7 +38,6 @@ class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDes
     public boolean matches(final FieldDescription fieldDescription) {
         final boolean matches = isPublic().and(not(isStatic())).matches(fieldDescription) && isAccessorMethodFound(fieldDescription);
         if(matches) {
-            System.out.printf("Matched Field: %-10s%n", fieldDescription.getName());
             this.fieldDescription = fieldDescription;
         }
         return matches;
@@ -66,15 +65,6 @@ class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDes
     private boolean isAccessorForField(final FieldDescription field, final MethodDescription method) {
         final boolean accessorNameMatchesField = method.getName().equals(accessorLookup.forGetter() ? getterName(field) : setterName(field));
         return accessorNameMatchesField && (accessorLookup.forGetter() ? isGetter().matches(method) : isSetter().matches(method));
-    }
-
-    private static String getterName(final FieldDescription field) {
-        return "get" + capitalize(field.getName());
-    }
-
-    private String setterName(final FieldDescription field) {
-        final var fieldName = capitalize(field.getName());
-        return isFieldBoolean(field) ? "is" + fieldName : "set" + fieldName;
     }
 
     /**

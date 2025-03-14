@@ -1,5 +1,6 @@
 package io.github.manoelcampos.accessors;
 
+import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
@@ -15,16 +16,18 @@ class SetterMatcher extends AbstractAccessorMatcher {
         super(fieldMatcher);
     }
 
+    /**
+     * {@return the name of the setter for a given field}
+     * @param field the field to retrieve its setter name
+     */
+    public static String setterName(final FieldDescription field) {
+        final var fieldName = capitalize(field.getName());
+        return isFieldBoolean(field) ? "is" + fieldName : "set" + fieldName;
+    }
+
     @Override
     public boolean matches(final MethodDescription methodDescription) {
-        final boolean matches = isSetter().matches(methodDescription) && isAccessorForField(methodDescription);
-        if(matches) {
-            System.out.printf(
-                    "        Field: %-10s Setter: %s%n",
-                    getFieldName(), methodDescription.getName());
-        }
-
-        return matches;
+        return isSetter().matches(methodDescription) && isAccessorForField(methodDescription);
     }
 
     @Override
