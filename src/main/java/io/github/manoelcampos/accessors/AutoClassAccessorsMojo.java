@@ -38,9 +38,9 @@ public class AutoClassAccessorsMojo extends AbstractMojo {
      *
      * <p><b>NOTE:</b> This must be the same version on the pom.xml in this maven plugin project.</p>
      */
-    private final MavenDependency accessorsPlugin = new MavenDependency(
+    final MavenDependency accessorsPlugin = new MavenDependency(
         "io.github.manoelcampos", "auto-class-accessors-maven-plugin",
-        "1.0.0"
+        "1.0.1"
     );
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
