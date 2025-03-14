@@ -55,7 +55,7 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
      */
     @Override
     public boolean matches(final TypeDescription typeDefinition) {
-        return not(isInterface().and(isRecord())).matches(typeDefinition);
+        return not(isInterface().or(isRecord())).matches(typeDefinition);
     }
 
     @Override
