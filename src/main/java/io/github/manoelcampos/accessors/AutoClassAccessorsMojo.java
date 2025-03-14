@@ -29,6 +29,13 @@ public class AutoClassAccessorsMojo extends AbstractMojo {
      * Such a class is the one that actually applies the byte code transformation,
      * replacing accesses to public instance fields by getter/setter calls.
      *
+     * <p>We cannot use the {@link #project} object to access the information of the pom.xml file
+     * in production, because that object will get the pom from the project using this plugin,
+     * not the plugin's pom itself. And we cannot try to read the pom.xml file directly,
+     * since in runtime, we would need to extract it from the plugin jar file (except for tests).
+     * This way, this version needs to be defined manually, copying the value from the pom.xml.
+     * </p>
+     *
      * <p><b>NOTE:</b> This must be the same version on the pom.xml in this maven plugin project.</p>
      */
     private final MavenDependency accessorsPlugin = new MavenDependency(
