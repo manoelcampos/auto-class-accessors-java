@@ -6,7 +6,6 @@ import net.bytebuddy.build.Plugin;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.ClassFileLocator;
 import net.bytebuddy.dynamic.DynamicType;
-import net.bytebuddy.matcher.ElementMatcher;
 import net.bytebuddy.matcher.ElementMatchers;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
@@ -49,32 +48,14 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
 
     /**
      * {@inheritDoc}
-     * Defines if a class (where a field access was intercepted) will be transformed by this plugin.
-     * It intends to transform classes that are directly accessing public fields in JPA Entity classes,
-     * but those entities themselves won't be transformed.
+     * Indicates that only classes (where a field access was intercepted) will be transformed by this plugin.
+     * This no, interfaces and records are not transformed since there is no need for them.
      * @param typeDefinition {@inheritDoc}
      * @return {@inheritDoc}
      */
     @Override
     public boolean matches(final TypeDescription typeDefinition) {
-        return !isJpaEntity(typeDefinition);
-    }
-
-    /**
-     * Checks if a type about to be transformed is an Entity class,
-     * a class annotated with JPA {@code @Entity}.
-     * @param typeDefinition the type to be checked
-     * @return
-     */
-    static boolean isJpaEntity(final TypeDescription typeDefinition) {
-        return isAnnotatedWith(named("jakarta.persistence.Entity")).matches(typeDefinition);
-    }
-
-    /**
-     * {@return a matcher that checks if an element is not a record, interface or annotation, but a class}
-     */
-    private static ElementMatcher.Junction<TypeDescription> isClassMatcher() {
-        return not(isRecord().or(isInterface()).or(isAnnotation()));
+        return not(isInterface().and(isRecord())).matches(typeDefinition);
     }
 
     @Override

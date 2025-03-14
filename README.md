@@ -1,30 +1,26 @@
-# Java Auto Class Accessors
+# Java Auto Class Accessors Maven Plugin
 
-A tiny library that uses [bytecode manipulation](https://github.com/raphw/byte-buddy) to provide automatic implementation of accessors in JPA entity classes (classes annotated with `@jakarta.persistence.Entity`).
-
-You can make your entity attributes public and the library will replace read and write access to those attributes with calls to the corresponding getter and setter methods (if existing).
+A tiny Maven Plugin that uses [bytecode manipulation](https://github.com/raphw/byte-buddy) to provide automatic implementation of accessors in classes. You can make your class attributes public and the plugin will replace read and write access to them with calls to the corresponding getter and setter method (if existing).
 
 ## Usage
 
-Add the dependency to your project:
+Add the plugin inside the `<build><plugins>` tag of your project's `pom.xml` file:
 
 ```xml
-<dependency>
+<plugin>
     <groupId>io.github.manoelcampos</groupId>
-    <artifactId>auto-class-accessors</artifactId>
-    <version>LATEST</version> <!-- You can set a specific version here -->
-</dependency>
+    <artifactId>auto-class-accessors-maven-plugin</artifactId>
+    <version>1.0.0</version>
+    <executions><execution><goals><goal>apply</goal></goals></execution></executions>
+</plugin>
 ```
 
-Now create you JPA Entity classes, such as:
+Create a class (it can be a JPA entity or not) with public instance fields:
 
 ```java
-@Entity
 public class City {
-    @NotNull @NotBlank
     public String name;
 
-    @NotNull @NotBlank
     public String state;
 
     public String getState() {
@@ -44,7 +40,8 @@ public class City {
 }
 ```
 
-Now, if you access any public attribute of the `City` class anywhere, the library will automatically call the corresponding getter or setter method (if existing):
+Now, if you access any public instance fields of the `City` class from other class, the plugin will change the class' bytecode during build time
+to automatically call the corresponding getter or setter method instead (if existing):
 
 ```java
 var city = new City();

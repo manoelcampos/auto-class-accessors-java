@@ -5,7 +5,6 @@ import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
-import static io.github.manoelcampos.accessors.EntityAccessorInstrumentationPlugin.isJpaEntity;
 import static io.github.manoelcampos.accessors.GetterMatcher.getterName;
 import static io.github.manoelcampos.accessors.SetterMatcher.setterName;
 import static net.bytebuddy.matcher.ElementMatchers.*;
@@ -52,7 +51,6 @@ class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDes
         // If a field is directly accessed inside the class that declares it, no transformation is performed
         final boolean isFieldAccessOutsideDeclaringClass = !field.getDeclaringType().equals(typeDescription);
         final boolean matches =
-                isFieldDeclaredInsideEntity(field) &&
                 isFieldAccessOutsideDeclaringClass &&
                 isPublicInstanceField(field) &&
                 isAccessorMethodFound(field);
@@ -62,10 +60,6 @@ class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDes
         }
 
         return matches;
-    }
-
-    private static boolean isFieldDeclaredInsideEntity(final FieldDescription field) {
-        return isJpaEntity(field.getDeclaringType().asErasure());
     }
 
     private static boolean isPublicInstanceField(final FieldDescription fieldDescription) {
