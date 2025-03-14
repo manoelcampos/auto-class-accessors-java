@@ -9,6 +9,10 @@
     <version>1.0.0</version>
 
     <name>auto-class-accessors-maven-plugin</name>
+    <description>
+        A Maven Plugin that uses bytecode manipulation to provide automatic implementation of accessors in classes during build time.
+    </description>
+
     <url>https://github.com/manoelcampos/auto-class-accessors-maven-plugin</url>
 
     <properties>
