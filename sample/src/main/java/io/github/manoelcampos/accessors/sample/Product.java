@@ -1,24 +1,15 @@
 package io.github.manoelcampos.accessors.sample;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
 import java.util.Objects;
 
 /// All atributes are public since we are using [Auto Class Accessors](https://github.com/manoelcampos/auto-class-accessors-java)
+/// This class can be an JPA Entity or not.
 /// @author Manoel Campos
-@Entity
+///
 public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
-
     public String name;
-
     public String model;
-
     public Boolean available;
 
     public Product() {
