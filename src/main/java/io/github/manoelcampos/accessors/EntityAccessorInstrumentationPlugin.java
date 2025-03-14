@@ -18,15 +18,15 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @author Manoel Campos
  */
 public class EntityAccessorInstrumentationPlugin implements Plugin {
-    private final InstanceFieldMatcher fieldMatcherForFieldRead = new InstanceFieldMatcher(AccessorLookup.GETTER);
-    private final InstanceFieldMatcher fieldMatcherForFieldWrite = new InstanceFieldMatcher(AccessorLookup.SETTER);
-
     @Override
     public DynamicType.Builder<?> apply(
         final DynamicType.Builder<?> builder,
         final TypeDescription typeDescription,
         final ClassFileLocator classFileLocator)
     {
+        final var fieldMatcherForFieldRead = new InstanceFieldMatcher(AccessorLookup.GETTER, typeDescription);
+        final var fieldMatcherForFieldWrite = new InstanceFieldMatcher(AccessorLookup.SETTER, typeDescription);
+
         // TODO: See MemberSubstitution docs for Notes
         // Replaces public instance fields reads by the respective getter call
         final var getterMatcher = new GetterMatcher(fieldMatcherForFieldRead);
@@ -49,18 +49,25 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
 
     /**
      * {@inheritDoc}
-     * Defines the classes that will be transformed by this plugin.
-     * It intends to transform classes that are directly accessing public fields in JPA Entities,
+     * Defines if a class (where a field access was intercepted) will be transformed by this plugin.
+     * It intends to transform classes that are directly accessing public fields in JPA Entity classes,
      * but those entities themselves won't be transformed.
-     * This way, if the entity directly access one of its own fields,
-     * that access won't be replaced by the respective accessor method call.
-     * @param typeDefinitions {@inheritDoc}
+     * @param typeDefinition {@inheritDoc}
      * @return {@inheritDoc}
      */
     @Override
-    public boolean matches(final TypeDescription typeDefinitions) {
-        final var entityMatcher = named("jakarta.persistence.Entity");
-        return isClassMatcher().and(not(isAnnotatedWith(entityMatcher))).matches(typeDefinitions);
+    public boolean matches(final TypeDescription typeDefinition) {
+        return !isJpaEntity(typeDefinition);
+    }
+
+    /**
+     * Checks if a type about to be transformed is an Entity class,
+     * a class annotated with JPA {@code @Entity}.
+     * @param typeDefinition the type to be checked
+     * @return
+     */
+    static boolean isJpaEntity(final TypeDescription typeDefinition) {
+        return isAnnotatedWith(named("jakarta.persistence.Entity")).matches(typeDefinition);
     }
 
     /**

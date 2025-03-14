@@ -2,8 +2,10 @@ package io.github.manoelcampos.accessors;
 
 import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 
+import static io.github.manoelcampos.accessors.EntityAccessorInstrumentationPlugin.isJpaEntity;
 import static io.github.manoelcampos.accessors.GetterMatcher.getterName;
 import static io.github.manoelcampos.accessors.SetterMatcher.setterName;
 import static net.bytebuddy.matcher.ElementMatchers.*;
@@ -30,17 +32,44 @@ class InstanceFieldMatcher extends ElementMatcher.Junction.AbstractBase<FieldDes
     /** @see #getFieldDescription() */
     private FieldDescription fieldDescription;
 
-    InstanceFieldMatcher(final AccessorLookup accessorLookup) {
+    /**
+     * The type being transformed
+     */
+    private final TypeDescription typeDescription;
+
+    /**
+     * Creates an InstanceFieldMatcher.
+     * @param accessorLookup an {@link AccessorLookup} value
+     * @param typeDescription see {@link #typeDescription}
+     */
+    InstanceFieldMatcher(final AccessorLookup accessorLookup, final TypeDescription typeDescription) {
         this.accessorLookup = accessorLookup;
+        this.typeDescription = typeDescription;
     }
 
     @Override
-    public boolean matches(final FieldDescription fieldDescription) {
-        final boolean matches = isPublic().and(not(isStatic())).matches(fieldDescription) && isAccessorMethodFound(fieldDescription);
+    public boolean matches(final FieldDescription field) {
+        // If a field is directly accessed inside the class that declares it, no transformation is performed
+        final boolean isFieldAccessOutsideDeclaringClass = !field.getDeclaringType().equals(typeDescription);
+        final boolean matches =
+                isFieldDeclaredInsideEntity(field) &&
+                isFieldAccessOutsideDeclaringClass &&
+                isPublicInstanceField(field) &&
+                isAccessorMethodFound(field);
+
         if(matches) {
-            this.fieldDescription = fieldDescription;
+            this.fieldDescription = field;
         }
+
         return matches;
+    }
+
+    private static boolean isFieldDeclaredInsideEntity(final FieldDescription field) {
+        return isJpaEntity(field.getDeclaringType().asErasure());
+    }
+
+    private static boolean isPublicInstanceField(final FieldDescription fieldDescription) {
+        return isPublic().and(not(isStatic())).matches(fieldDescription);
     }
 
     /**
