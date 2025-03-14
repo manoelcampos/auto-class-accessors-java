@@ -1,2 +1,0 @@
-# automatically apply the EntityAccessorInstrumentationPlugin to all classes in the project
-io.github.manoelcampos.accessors.EntityAccessorInstrumentationPlugin
