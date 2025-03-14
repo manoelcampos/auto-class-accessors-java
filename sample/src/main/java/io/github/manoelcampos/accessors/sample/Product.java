@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import java.util.Objects;
 
 /// All atributes are public since we are using [Auto Class Accessors](https://github.com/manoelcampos/auto-class-accessors-java)
-/// TODO: Currently, if there are missing getter/setter methods, the plugin will fail.
 /// @author Manoel Campos
 @Entity
 public class Product {
