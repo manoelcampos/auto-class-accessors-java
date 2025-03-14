@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+deploy.sh
 ### IntelliJ IDEA ###
 .idea/
 *.iws
