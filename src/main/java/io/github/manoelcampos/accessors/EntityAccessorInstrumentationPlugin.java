@@ -31,7 +31,6 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
         // Replaces public instance fields reads by the respective getter call
         final var getterMatcher = new GetterMatcher(typeDescription, fieldMatcherForFieldRead);
         final var visitorForMethodWithFieldRead = MemberSubstitution.relaxed()
-                                                                 .failIfNoMatch(false)
                                                                  .field(fieldMatcherForFieldRead)
                                                                  .onRead()
                                                                  .replaceWithMethod(getterMatcher)
@@ -40,7 +39,6 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
         // Replaces public instance fields writes by the respective setter call
         final var setterMatcher = new SetterMatcher(fieldMatcherForFieldWrite);
         final var visitorForMethodWithFieldWrite = MemberSubstitution.relaxed()
-                                                                  .failIfNoMatch(false)
                                                                   .field(fieldMatcherForFieldWrite)
                                                                   .onWrite()
                                                                   .replaceWithMethod(setterMatcher)
