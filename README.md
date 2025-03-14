@@ -55,7 +55,7 @@ public class Main {
 
 Now build the project. The plugin will change the bytecode of the class above, during build time, 
 to automatically call the corresponding getter or setter method instead (if existing).
-This way, the code corresponding to the resulting bytecode for the `Main` class will be:
+This way, the source code corresponding to the resulting bytecode for the `Main` class will be:
 
 ```java
 public class Main {
@@ -86,7 +86,8 @@ Boot;
 
 ## How the plugin is different from Lombok
 
-Lombok and this plugin perform bytecode manipulation during your project build, usually adding code that you'll use directly.
+Lombok and this plugin perform bytecode manipulation during your project build.
+However, Lombok usually adds new methods that you'll call directly (such as getters and setters).
 For instance, you can create a class with no getters and setters and use Lombok annotations to add them:
 
 ```java
@@ -98,7 +99,8 @@ public class City {
 }
 ```
 
-Then you'd need to explicitly call the getters and setters yourself. Taking the `Main` class as an example, this sould be the code you'd need to write:
+Then you'd need to explicitly call the getters and setters yourself. 
+Taking the `Main` class as an example, this should be the code you'd need to write:
 
 ```java
 public class Main {
