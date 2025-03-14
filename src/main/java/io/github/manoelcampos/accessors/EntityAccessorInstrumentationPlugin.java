@@ -14,6 +14,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 /**
  * Byte Buddy plugin that instruments the bytecode of classes that directly access public fields in JPA Entities,
  * replacing such access by the respective accessor (getter or setter) method calls (if existent).
+ * This plugin defines how the transformation will be done, indicating when and how byte code will be changed.
  * @author Manoel Campos
  */
 public class EntityAccessorInstrumentationPlugin implements Plugin {

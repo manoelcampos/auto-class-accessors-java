@@ -1,0 +1,11 @@
+<!-- https://maven.apache.org/ref/3.9.9/maven-plugin-api/plugin.html -->
+<plugin>
+    <mojos>
+        <mojo>
+            <goal>apply</goal>
+            <phase>process-classes</phase>
+            <description>Replaces accesses to public instance fields by the respective accessor (getter/setter) method call, if available.</description>
+            <implementation>io.github.manoelcampos.accessors.AutoClassAccessorsMojo</implementation>
+        </mojo>
+    </mojos>
+</plugin>

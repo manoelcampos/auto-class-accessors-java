@@ -1,0 +1,76 @@
+package io.github.manoelcampos.accessors;
+
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.BuildPluginManager;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
+import org.twdata.maven.mojoexecutor.MojoExecutor;
+
+import javax.inject.Inject;
+
+import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
+
+/// A Maven plugin that invokes Byte Buddy Maven Plugin to transform compiled classes,
+/// replacing access to public instance fields by the respective accessor (getter/setter) method call, if available.
+/// @author Manoel Campos da Silva Filho
+/// @link https://maven.apache.org/guides/plugin/guide-java-plugin-development.html
+@Mojo(name = "apply", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresDependencyResolution = ResolutionScope.COMPILE)
+public class AutoClassAccessorsMojo extends AbstractMojo {
+    private final MavenDependency byteBuddyPlugin = new MavenDependency("net.bytebuddy", "byte-buddy-maven-plugin", "1.17.2");
+
+    /**
+     * A reference to the current version of the Auto Class Accessors Maven Plugin,
+     * to get the {@link EntityAccessorInstrumentationPlugin class that implements a Byte Buddy Plugin}.
+     * Such a class is the one that actually applies the byte code transformation,
+     * replacing accesses to public instance fields by getter/setter calls.
+     *
+     * <p><b>NOTE:</b> This must be the same version on the pom.xml in this maven plugin project.</p>
+     */
+    private final MavenDependency accessorsPlugin = new MavenDependency(
+        "io.github.manoelcampos", "auto-class-accessors-maven-plugin",
+        "1.0.0"
+    );
+
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
+    private MavenProject project;
+
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    private MavenSession session;
+
+    @Inject
+    private BuildPluginManager manager;
+
+    @Override
+    public void execute() throws MojoExecutionException {
+        getLog().info("Executing Auto Class Accessors transformation via Byte Buddy to replace accesses to public instance fields by getter/setter calls...");
+        try {
+            // Invoke Byte Buddy Maven Plugin programmatically
+            MojoExecutor.executeMojo(
+                    plugin(
+                        MojoExecutor.groupId(byteBuddyPlugin.groupId()),
+                        MojoExecutor.artifactId(byteBuddyPlugin.artifactId()),
+                        MojoExecutor.version(byteBuddyPlugin.version())
+                    ),
+                    goal("transform"),
+                    configuration(
+                        element("transformations",
+                            element("transformation",
+                                element("groupId", accessorsPlugin.groupId()),
+                                element("artifactId", accessorsPlugin.artifactId()),
+                                element("version", accessorsPlugin.version()),
+                                element("plugin", EntityAccessorInstrumentationPlugin.class.getName())
+                            )
+                        )
+                    ),
+                    executionEnvironment(project, session, manager)
+            );
+        } catch (Exception e) {
+            throw new MojoExecutionException("Failed to execute Byte Buddy Maven Plugin to apply auto class accessors.", e);
+        }
+    }
+}
