@@ -133,8 +133,6 @@ you'll need to explicitly call them after removing the plugin.
 
 You can automatically do that in your entire project by using the [OpenRewrite tool](https://github.com/openrewrite/rewrite), [which has a Maven Plugin as well](https://docs.openrewrite.org).
 
-
-
 ## Plans for future
 
 Lombok has some great features. Any feature that just changes existing methods (instead of introducing brand-new ones that you explicitly call) can be implemented.
@@ -143,5 +141,10 @@ Lombok provides a very nice set of annotations to override the implementation of
 so that the plugin will some compatibility with Lombok (despite the package of these annotations here will be different).
 
 Other Lombok annotation such as `@Builder` can be implemented as well, but in a different way: performing source code generation instead of adding a new Builder class inside your own class.
-This approach don't require IDE support, since the generated Java file will be found by the IDE. 
+This approach don't require IDE support, since the generated Java file will be found by the IDE.
 But this is something that is wonderfully made by the [Immutable Library](http://immutables.github.io).
+
+On the other hand, Lombok features such as `@AllArgsConstructor` won't be implemented here, 
+since they introduce new methods just in the .class files, that your IDE won't be aware of. 
+Furthermore, this annotation and `@Builder` have their own [issues for years](https://github.com/projectlombok/lombok/issues/2888).
+
