@@ -2,6 +2,10 @@
 
 A tiny Maven Plugin that uses [bytecode manipulation](https://github.com/raphw/byte-buddy) to provide automatic implementation of accessors in classes. You can make your class attributes public and the plugin will replace read and write access to them with calls to the corresponding getter and setter method (if existing).
 
+Some languages provide automatic accessors by means of a feature called properties, such as [Kotlin](https://kotlinlang.org/docs/properties.html) and [TypeScript](https://devblogs.microsoft.com/typescript/announcing-typescript-4-9/?ref=blog.lsantos.dev#auto-accessors-in-classes), which requires no additional effort. But other languages such as [C# requires you to write some boilerplate code](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/using-properties).
+
+This plugin follows the first approach, making it natural the implementation of getters and setters as usual, just when required.
+
 ## 1. Usage
 
 Add the plugin inside the `<build><plugins>` tag of your project's `pom.xml` file:
