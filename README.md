@@ -124,6 +124,16 @@ This way, even if you remove the plugin, your code still compiles (despite it ma
 That simplifies the build process and avoid Lombok issues that always happen when opening the project on some IDE (even those which have default support for it).
 Who haven't sometime opened a project on IntelliJ and got a lot of errors because of Lombok?
 
+## How to remove the plugin
+
+In order to the plugin from the pom.xml is enough to delete it from your project's pom.xml file.
+Your project will continue building, despite you may not have the same behaviour/results as before.
+It's a great idea to have tests. But regardless of that, if you have getters and setters with custom logic,
+you'll need to explicitly call them after removing the plugin.
+
+You can automatically do that in your entire project by using the [OpenRewrite tool](https://github.com/openrewrite/rewrite), [which has a Maven Plugin as well](https://docs.openrewrite.org).
+
+
 
 ## Plans for future
 
