@@ -2,7 +2,7 @@
 
 A tiny Maven Plugin that uses [bytecode manipulation](https://github.com/raphw/byte-buddy) to provide automatic implementation of accessors in classes. You can make your class attributes public and the plugin will replace read and write access to them with calls to the corresponding getter and setter method (if existing).
 
-## Usage
+## 1. Usage
 
 Add the plugin inside the `<build><plugins>` tag of your project's `pom.xml` file:
 
@@ -71,7 +71,7 @@ public class Main {
 
 You can confirm that by opening the `Main.class` compiled file inside some IDE.
 
-## Motivation
+## 2. Motivation
 
 JDK 16 introduced the [record type](https://openjdk.org/jeps/395), which are shallowly-immutable classes providing automatic getters and other utilities. However, [records cannot be fully used as JPA entities](https://thorben-janssen.com/java-records-hibernate-jpa/#records-cant-be-entities).
 
@@ -84,7 +84,7 @@ Boot;
 - and when the project uses multiple annotation processors, usually we need to [ensure that Lombok is executed first](https://github.com/projectlombok/lombok/issues/973#issuecomment-2537613474). 
 
 
-## How the plugin is different from Lombok
+## 3. How the plugin is different from Lombok
 
 Lombok and this plugin perform bytecode manipulation during your project build.
 However, Lombok usually adds new methods that you'll call directly (such as getters and setters).
@@ -124,7 +124,7 @@ This way, even if you remove the plugin, your code still compiles (despite it ma
 That simplifies the build process and avoid Lombok issues that always happen when opening the project on some IDE (even those which have default support for it).
 Who haven't sometime opened a project on IntelliJ and got a lot of errors because of Lombok?
 
-## How to remove the plugin
+## 4. How to remove the plugin
 
 In order to the plugin from the pom.xml is enough to delete it from your project's pom.xml file.
 Your project will continue building, despite you may not have the same behaviour/results as before.
@@ -133,7 +133,7 @@ you'll need to explicitly call them after removing the plugin.
 
 You can automatically do that in your entire project by using the [OpenRewrite tool](https://github.com/openrewrite/rewrite), [which has a Maven Plugin as well](https://docs.openrewrite.org).
 
-## Plans for future
+## 5. Plans for future
 
 Lombok has some great features. Any feature that just changes existing methods (instead of introducing brand-new ones that you explicitly call) can be implemented.
 Some of them are methods from the `Object` class, such as `toString()`, `equals()`, `hashCode()` etc.
