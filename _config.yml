@@ -1,0 +1,19 @@
+title: "Java Auto Class Accessors Maven Plugin"
+description: "A tiny Maven Plugin that uses bytecode manipulation to provide automatic implementation of accessors in classes."
+google_analytics:
+show_downloads: true
+theme: jekyll-theme-architect
+encoding: utf-8
+
+exclude:
+  - CONTRIBUTING.md
+  - .github
+  - .gitignore
+
+plugins:
+  - jekyll-mentions
+  - jemoji
+
+webrick:
+  headers:
+    keywords: "java,jdk,setters,getters,accessors,jdk21"
