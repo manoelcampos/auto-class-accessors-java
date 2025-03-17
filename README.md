@@ -57,8 +57,7 @@ public class Main {
 }
 ```
 
-Now build the project. The plugin will change the bytecode of the class above, during build time, 
-to automatically call the corresponding getter or setter method instead (if existing).
+Now build the project using Maven. The plugin will change the bytecode of the class above, during build time, to automatically call the corresponding getter or setter method instead (if existing).
 This way, the source code corresponding to the resulting bytecode for the `Main` class will be:
 
 ```java
@@ -74,6 +73,16 @@ public class Main {
 ```
 
 You can confirm that by opening the `Main.class` compiled file inside some IDE.
+
+### 1.1 IDE Configuration
+
+If you just run the application from an IDE, it may not use maven to build it. This way, the plugin won't be executed to change the bytecode of your classes. Therefore, you need to instruct your IDE to use maven to build and run your application.
+
+On IntelliJ, open the IDE settings and check the following option:
+
+`Build, Execution, Deployment > Maven > Runner > Delegate IDE build/run actions to maven`.
+
+If you are using other IDEs, check their documentation.
 
 ## 2. Motivation
 
