@@ -19,7 +19,7 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 /// replacing access to public instance fields by the respective accessor (getter/setter) method call, if available.
 /// @author Manoel Campos da Silva Filho
 /// @link https://maven.apache.org/guides/plugin/guide-java-plugin-development.html
-@Mojo(name = "apply", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresDependencyResolution = ResolutionScope.COMPILE)
+@Mojo(name = "apply", defaultPhase = LifecyclePhase.PROCESS_TEST_CLASSES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class AutoClassAccessorsMojo extends AbstractMojo {
     /**
      * A reference to the current version of the Auto Class Accessors Maven Plugin,
@@ -56,28 +56,37 @@ public class AutoClassAccessorsMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException {
         getLog().info("Executing Auto Class Accessors transformation via Byte Buddy to replace accesses to public instance fields by getter/setter calls...");
         try {
-            // Invoke Byte Buddy Maven Plugin programmatically
-            MojoExecutor.executeMojo(
-                    plugin(
-                        MojoExecutor.groupId(byteBuddyPlugin.groupId()),
-                        MojoExecutor.artifactId(byteBuddyPlugin.artifactId()),
-                        MojoExecutor.version(byteBuddyPlugin.version())
-                    ),
-                    goal("transform"),
-                    configuration(
-                        element("transformations",
-                            element("transformation",
-                                element("groupId", accessorsPlugin.groupId()),
-                                element("artifactId", accessorsPlugin.artifactId()),
-                                element("version", accessorsPlugin.version()),
-                                element("plugin", EntityAccessorInstrumentationPlugin.class.getName())
-                            )
-                        )
-                    ),
-                    executionEnvironment(project, session, manager)
-            );
+            runByteBuddyPlugin("transform");      // transforms the bytecode of main classes
+            runByteBuddyPlugin("transform-test"); // transforms the bytecode of test classes
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to execute Byte Buddy Maven Plugin to apply auto class accessors.", e);
         }
+    }
+
+    /**
+     * Invoke Byte Buddy Maven Plugin programmatically
+     * @param goal the goal to execute
+     * @throws MojoExecutionException
+     */
+    private void runByteBuddyPlugin(final String goal) throws MojoExecutionException {
+        MojoExecutor.executeMojo(
+                plugin(
+                    MojoExecutor.groupId(byteBuddyPlugin.groupId()),
+                    MojoExecutor.artifactId(byteBuddyPlugin.artifactId()),
+                    MojoExecutor.version(byteBuddyPlugin.version())
+                ),
+                goal(goal),
+                configuration(
+                    element("transformations",
+                        element("transformation",
+                            element("groupId", accessorsPlugin.groupId()),
+                            element("artifactId", accessorsPlugin.artifactId()),
+                            element("version", accessorsPlugin.version()),
+                            element("plugin", EntityAccessorInstrumentationPlugin.class.getName())
+                        )
+                    )
+                ),
+                executionEnvironment(project, session, manager)
+        );
     }
 }
