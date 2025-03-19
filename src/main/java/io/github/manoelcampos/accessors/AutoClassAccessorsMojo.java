@@ -21,8 +21,6 @@ import static org.twdata.maven.mojoexecutor.MojoExecutor.*;
 /// @link https://maven.apache.org/guides/plugin/guide-java-plugin-development.html
 @Mojo(name = "apply", defaultPhase = LifecyclePhase.PROCESS_CLASSES, requiresDependencyResolution = ResolutionScope.COMPILE)
 public class AutoClassAccessorsMojo extends AbstractMojo {
-    private final MavenDependency byteBuddyPlugin = new MavenDependency("net.bytebuddy", "byte-buddy-maven-plugin", "1.17.2");
-
     /**
      * A reference to the current version of the Auto Class Accessors Maven Plugin,
      * to get the {@link EntityAccessorInstrumentationPlugin class that implements a Byte Buddy Plugin}.
@@ -39,9 +37,11 @@ public class AutoClassAccessorsMojo extends AbstractMojo {
      * <p><b>NOTE:</b> This must be the same version on the pom.xml in this maven plugin project.</p>
      */
     final MavenDependency accessorsPlugin = new MavenDependency(
-        "io.github.manoelcampos", "auto-class-accessors-maven-plugin",
-        "1.0.1"
+            "io.github.manoelcampos", "auto-class-accessors-maven-plugin",
+            "1.0.2"
     );
+
+    private final MavenDependency byteBuddyPlugin = new MavenDependency("net.bytebuddy", "byte-buddy-maven-plugin", "1.17.2");
 
     @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
