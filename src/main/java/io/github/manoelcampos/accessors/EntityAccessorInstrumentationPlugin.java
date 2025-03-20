@@ -1,6 +1,7 @@
 package io.github.manoelcampos.accessors;
 
 import io.github.manoelcampos.accessors.InstanceFieldMatcher.AccessorLookup;
+import net.bytebuddy.asm.AsmVisitorWrapper;
 import net.bytebuddy.asm.MemberSubstitution;
 import net.bytebuddy.build.Plugin;
 import net.bytebuddy.description.type.TypeDescription;
@@ -23,27 +24,40 @@ public class EntityAccessorInstrumentationPlugin implements Plugin {
         final TypeDescription typeDescription,
         final ClassFileLocator classFileLocator)
     {
-        final var fieldMatcherForFieldRead = new InstanceFieldMatcher(AccessorLookup.GETTER, typeDescription);
-        final var fieldMatcherForFieldWrite = new InstanceFieldMatcher(AccessorLookup.SETTER, typeDescription);
-
         // TODO: See MemberSubstitution docs for Notes
-        // Replaces public instance fields reads by the respective getter call
+        final var visitorForMethodsWithFieldRead = newFieldReadVisitor(typeDescription);
+        final var visitorForMethodsWithFieldWrite = newFieldWriteVisitor(typeDescription);
+        return builder.visit(visitorForMethodsWithFieldRead).visit(visitorForMethodsWithFieldWrite);
+    }
+
+    /**
+     * Replaces public instance fields reads by the respective getter call.
+     * @param typeDescription the type being transformed, where the method writing a field is defined
+     * @return a visitor for methods which have a field read operation
+     */
+    private static AsmVisitorWrapper.ForDeclaredMethods newFieldReadVisitor(TypeDescription typeDescription) {
+        final var fieldMatcherForFieldRead = new InstanceFieldMatcher(AccessorLookup.GETTER, typeDescription);
         final var getterMatcher = new GetterMatcher(fieldMatcherForFieldRead);
-        final var visitorForMethodWithFieldRead = MemberSubstitution.relaxed()
-                                                                 .field(fieldMatcherForFieldRead)
-                                                                 .onRead()
-                                                                 .replaceWithMethod(getterMatcher)
-                                                                 .on(ElementMatchers.isMethod());
+        return MemberSubstitution.relaxed()
+                                 .field(fieldMatcherForFieldRead)
+                                 .onRead()
+                                 .replaceWithMethod(getterMatcher)
+                                 .on(ElementMatchers.isMethod());
+    }
 
-        // Replaces public instance fields writes by the respective setter call
+    /**
+     * Replaces public instance fields writes by the respective setter call.
+     * @param typeDescription the type being transformed, where the method reading a field is defined
+     * @return a visitor for methods which have a field write operation
+     */
+    private static AsmVisitorWrapper.ForDeclaredMethods newFieldWriteVisitor(TypeDescription typeDescription) {
+        final var fieldMatcherForFieldWrite = new InstanceFieldMatcher(AccessorLookup.SETTER, typeDescription);
         final var setterMatcher = new SetterMatcher(fieldMatcherForFieldWrite);
-        final var visitorForMethodWithFieldWrite = MemberSubstitution.relaxed()
-                                                                  .field(fieldMatcherForFieldWrite)
-                                                                  .onWrite()
-                                                                  .replaceWithMethod(setterMatcher)
-                                                                  .on(ElementMatchers.isMethod());
-
-        return builder.visit(visitorForMethodWithFieldRead).visit(visitorForMethodWithFieldWrite);
+        return MemberSubstitution.relaxed()
+                                 .field(fieldMatcherForFieldWrite)
+                                 .onWrite()
+                                 .replaceWithMethod(setterMatcher)
+                                 .on(ElementMatchers.isMethod());
     }
 
     /**
